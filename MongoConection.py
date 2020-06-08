@@ -9,3 +9,6 @@ COLLECTION = DDBB["Subvencion"]
 query = COLLECTION.find_one()
 pprint.pprint(query)
 
+def hola():
+    hola = "hola"
+    return hola
