@@ -3,17 +3,13 @@ import pprint
 
 
 
-def hola():
-    hola = "hola"
-    return hola
-
-def main():
-    CLIENT = pymongo.MongoClient("mongodb://localhost:27017/")
-    DDBB = CLIENT["G5Proyecto"]
-    COLLECTION = DDBB["Subvencion"]
-
+#La primera consulta a realizar será la comparación de la cifra anual, junto a la cifra mensual del monto total subvencionado a zonas rurales vs zonas urbanas.
+def query(COLLECTION):
     query = COLLECTION.find_one()
-    pprint.pprint(query)
+    return query
 
-if __name__ == '__main__':
-    main()
+
+CLIENT = pymongo.MongoClient("mongodb://localhost:27017/")
+DDBB = CLIENT["G5Proyecto"]
+COLLECTION = DDBB["Subvencion"]
+
