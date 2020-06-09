@@ -95,7 +95,6 @@ def EscolaridadPorRegion(anno):
         }, {
             '$group': {
                 '_id': {
-                    'mes': '$mes',
                     'anno': '$anno',
                     'area': '$area',
                     'region': '$reg_cod'
@@ -119,9 +118,9 @@ def EscolaridadPorRegion(anno):
 
     for element in cursor:
         if (element['_id']['area'] == "Urbano"):
-            listUrbana.append(element)
+            listUrbana.append(element['totalEscolaridad'])
         else:
-            listRural.append(element)
+            listRural.append(element['totalEscolaridad'])
     return listUrbana, listRural
 
 def EscolaridadPorAreaMes(anno,mes):
@@ -171,4 +170,3 @@ def DiferenciaAnnoConAnnoAnterior(anno, mes):
     listRuralT.append(differenciaRural)
 
     return listUrbanaT, listRuralT
-
