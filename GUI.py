@@ -42,6 +42,15 @@ class Application(ttk.Frame):
         self.boton3 = ttk.Button(self.third_frame, text='Query 3', command=self.grafico_tres)
         self.boton3.pack(side='left')
 
+        self.fourth_frame = ttk.Frame(self)
+        self.fourth_frame.pack(side='top', fill='both', expand=True)
+        self.combo4 = ttk.Combobox(self.fourth_frame, state="readonly")
+        self.combo4["values"] = [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]
+        self.combo4.set('Año')
+        self.combo4.pack(side='left')
+        self.boton4 = ttk.Button(self.fourth_frame, text='Query 4', command=self.grafico_cuatro)
+        self.boton4.pack(side='left')
+
     def grafico_uno(self):
         anno = self.combo1.get()
         listaUrbano, listaRural = mc.EscolaridadPorArea(int(anno))
@@ -54,7 +63,7 @@ class Application(ttk.Frame):
         #print(listaRural)
         plt.bar(X + 0.00, listaUrbano, color='b', width=0.33)
         plt.bar(X + 0.33, listaRural, color='r', width=0.33)
-        plt.xticks(X, meses, fontsize=7, rotation=(45))
+        plt.xticks(X, meses, fontsize=7, rotation=(90))
         colors = {'Área Urbana': 'blue', 'Área Rural': 'red'}
         labels = list(colors.keys())
         handles = [plt.Rectangle((0, 0), 1, 1, color=colors[label]) for label in labels]
@@ -63,7 +72,7 @@ class Application(ttk.Frame):
                   f'según área, del año {anno}')
 
         plt.gcf().axes[0].yaxis.get_major_formatter().set_scientific(False)
-        plt.yticks(fontsize=6, rotation=(90))
+        plt.yticks(fontsize=6)
         plt.xlabel('Mes')
         plt.ylabel('Chile Peso (CLP)')
         plt.tight_layout()
@@ -81,7 +90,7 @@ class Application(ttk.Frame):
         # print(listaRural)
         plt.bar(X + 0.00, listaUrbano, color='b', width=0.33)
         plt.bar(X + 0.33, listaRural, color='r', width=0.33)
-        plt.xticks(X, meses, fontsize=7, rotation=(45))
+        plt.xticks(X, meses, fontsize=7, rotation=(90))
         colors = {'Área Urbana': 'blue', 'Área Rural': 'red'}
         labels = list(colors.keys())
         handles = [plt.Rectangle((0, 0), 1, 1, color=colors[label]) for label in labels]
@@ -90,7 +99,7 @@ class Application(ttk.Frame):
                   f'según área, del año {anno}')
 
         plt.gcf().axes[0].yaxis.get_major_formatter().set_scientific(False)
-        plt.yticks(fontsize=6, rotation=(90))
+        plt.yticks(fontsize=6)
         plt.xlabel('Mes')
         plt.ylabel('Chile Peso (CLP)')
         plt.tight_layout()
@@ -112,9 +121,9 @@ class Application(ttk.Frame):
             regiones.append('XV Región')
             regiones.append('XVI Región')
             X = np.arange(16)
-        print(listaUrbano)
-        print('----------')
-        print(listaRural)
+        # print(listaUrbano)
+        # print('----------')
+        # print(listaRural)
         plt.bar(X + 0.00, listaUrbano, color='b', width=0.33)
         plt.bar(X + 0.33, listaRural, color='r', width=0.33)
         plt.xticks(X, regiones, fontsize=7, rotation=(90))
@@ -126,8 +135,34 @@ class Application(ttk.Frame):
                   f'por región, del año {anno}')
 
         plt.gcf().axes[0].yaxis.get_major_formatter().set_scientific(False)
-        plt.yticks(fontsize=6, rotation=(45))
+        plt.yticks(fontsize=6)
         plt.xlabel('Región')
+        plt.ylabel('Chile Peso (CLP)')
+        plt.tight_layout()
+        plt.show()
+    def grafico_cuatro(self):
+        anno = self.combo4.get()
+        listaUrbano, listaRural = mc.DiferenciaAnualporMes(int(anno))
+
+        meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+        X = np.arange(12)
+        # print(listaUrbano)
+        # print('----------')
+        # print(listaRural)
+        plt.bar(X + 0.00, listaUrbano, color='b', width=0.33)
+        plt.bar(X + 0.33, listaRural, color='r', width=0.33)
+        plt.xticks(X, meses, fontsize=7, rotation=(90))
+        colors = {'Área Urbana': 'blue', 'Área Rural': 'red'}
+        labels = list(colors.keys())
+        handles = [plt.Rectangle((0, 0), 1, 1, color=colors[label]) for label in labels]
+        plt.legend(handles, labels, bbox_to_anchor=(1.05, 1.0), loc='upper left')
+        plt.title(f'Diferencia monto total subvencionado a establecimientos\n'
+                  f'educacionales del año {anno} y el año {int(anno)-1}')
+
+        plt.gcf().axes[0].yaxis.get_major_formatter().set_scientific(False)
+        plt.yticks(fontsize=6)
+        plt.xlabel('Mes')
         plt.ylabel('Chile Peso (CLP)')
         plt.tight_layout()
         plt.show()

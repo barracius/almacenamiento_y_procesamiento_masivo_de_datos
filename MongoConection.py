@@ -170,3 +170,14 @@ def DiferenciaAnnoConAnnoAnterior(anno, mes):
     listRuralT.append(differenciaRural)
 
     return listUrbanaT, listRuralT
+
+def DiferenciaAnualporMes(anno):
+    ListUrbana = []
+    ListRural = []
+    mes = 1
+    while mes < 13:
+        valor = DiferenciaAnnoConAnnoAnterior(anno, mes)
+        ListUrbana.append(valor[0][0])
+        ListRural.append(valor[1][0])
+        mes += 1
+    return ListUrbana, ListRural
