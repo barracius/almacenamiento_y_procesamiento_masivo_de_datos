@@ -63,14 +63,18 @@ def EscolaridadPromedioPorArea(anno):
                 }
             }
         }, {
+            '$project': {
+                'escolaridadPorInstitucion': {
+                    '$divide':["$totalEscolaridad", "$count"]
+                }
+            }
+        }, {
             '$sort': {
                 '_id.mes': 1
+                }
             }
-        }
     ]
-    pipeline = json.loads('[{"$group": {"_id": {"area": "$area","anno": "%s","mes": "$mes"},"escolaridad": {"$sum": "$escolaridad"},"count": {"$sum": 1}}}'
-                         ', {"$project":{"escolaridadPorInstitucion": {"$divide":["$escolaridad", "$count"]}}},'
-                         '{"$sort": {"_id.mes": 1}}]' %(anno))
+
     cursor = COLLECTION.aggregate(pipeline)
     listUrbana = []
     listRural = []
@@ -168,5 +172,3 @@ def DiferenciaAnnoConAnnoAnterior(anno, mes):
 
     return listUrbanaT, listRuralT
 
-
-print(DiferenciaAnnoConAnnoAnterior(2011,6))
