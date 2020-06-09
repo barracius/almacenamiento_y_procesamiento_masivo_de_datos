@@ -20,7 +20,7 @@ def EscolaridadPorArea(anno):
     return listUrbana, listRural
 
 def EscolaridadPromedioPorArea(anno):
-    pipeline= json.loads('[{"$group": {"_id": {"area": "$area","anno": "%s","mes": "$mes"},"escolaridad": {"$sum": "$escolaridad"},"count": {"$sum": 1}}}'
+    pipeline = json.loads('[{"$group": {"_id": {"area": "$area","anno": "%s","mes": "$mes"},"escolaridad": {"$sum": "$escolaridad"},"count": {"$sum": 1}}}'
                          ', {"$project":{"escolaridadPorInstritucion": {"$divide":["$escolaridad", "$count"]}}},'
                          '{"$sort": {"_id.mes": 1}}]' %(anno))
     cursor = COLLECTION.aggregate(pipeline)
@@ -34,4 +34,16 @@ def EscolaridadPromedioPorArea(anno):
             listRural.append(element)
     return listUrbana, listRural
 
+def EscolaridadPorRegion(anno):
+    pipeline = json.loads('[{"$group": {"_id": {"mes": "$mes","anno": "%s", "area": "$area", region: "$reg_cod"},"escolaridad": {"$sum": "$escolaridad"},"count": {"$sum": 1}}},{"$sort": {"_id.mes": 1}}]'%(anno))
+    cursor = COLLECTION.aggregate(pipeline)
+    listUrbana = []
+    listRural = []
+
+    for element in cursor:
+        if (element['_id']['area'] == "Urbano"):
+            listUrbana.append(element)
+        else:
+            listRural.append(element)
+    return listUrbana, listRural
 
