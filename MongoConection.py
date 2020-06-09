@@ -13,9 +13,9 @@ def EscolaridadPorArea(anno):
 
     for element in cursor:
         if(element['_id']['area'] == "Urbano"):
-            listUrbana.append(element)
+            listUrbana.append(element['totalEscolaridad'])
         else:
-            listRural.append(element)
+            listRural.append(element['totalEscolaridad'])
     return listUrbana, listRural
 
 def EscolaridadPromedioPorArea(anno):
