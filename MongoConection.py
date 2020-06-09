@@ -1,5 +1,4 @@
 import pymongo
-import pprint
 import json
 
 CLIENT = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -47,3 +46,61 @@ def EscolaridadPorRegion(anno):
             listRural.append(element)
     return listUrbana, listRural
 
+def EscolaridadPorAreaMes(anno,mes):
+    pipeline=[
+    {
+        '$match': {
+            'mes': mes,
+            'anno': anno
+        }
+    }, {
+        '$group': {
+            '_id': {
+                'mes': '$mes',
+                'anno': '$anno',
+                'area': '$area'
+            },
+            'totalEscolaridad': {
+                '$sum': '$escolaridad'
+            }
+        }
+    }
+]
+    cursor = COLLECTION.aggregate(pipeline)
+    listUrbana = []
+    listRural = []
+
+
+    for element in cursor:
+        print(element)
+        if (element['_id']['area'] == "Urbano"):
+            listUrbana.append(element)
+        else:
+            listRural.append(element)
+
+    return listUrbana, listRural
+
+
+
+def DiferenciaAnnoConAnnoAnterior(anno, mes):
+    annoAnterior = anno-1
+    listUrbana1, listRural1 = EscolaridadPorAreaMes(anno, mes)
+    listUrbana2, listRural2 = EscolaridadPorAreaMes(annoAnterior, mes)
+
+    print("rural1: ", listRural1)
+    print("rural2: ", listRural2)
+
+    differenciaUrbana = listUrbana1[0]['totalEscolaridad']-listUrbana2[0]['totalEscolaridad']
+    listUrbanaT = []
+    listUrbanaT.append(differenciaUrbana)
+
+    differenciaRural = listRural1[0]['totalEscolaridad']-listRural2[0]['totalEscolaridad']
+    listRuralT= []
+    listRuralT.append(differenciaRural)
+
+
+
+    return listUrbanaT, listRuralT
+
+
+print(DiferenciaAnnoConAnnoAnterior(2016, 6))
