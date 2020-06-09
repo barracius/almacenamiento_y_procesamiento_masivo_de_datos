@@ -69,7 +69,7 @@ def EscolaridadPromedioPorArea(anno):
         }
     ]
     pipeline = json.loads('[{"$group": {"_id": {"area": "$area","anno": "%s","mes": "$mes"},"escolaridad": {"$sum": "$escolaridad"},"count": {"$sum": 1}}}'
-                         ', {"$project":{"escolaridadPorInstritucion": {"$divide":["$escolaridad", "$count"]}}},'
+                         ', {"$project":{"escolaridadPorInstitucion": {"$divide":["$escolaridad", "$count"]}}},'
                          '{"$sort": {"_id.mes": 1}}]' %(anno))
     cursor = COLLECTION.aggregate(pipeline)
     listUrbana = []
@@ -77,9 +77,9 @@ def EscolaridadPromedioPorArea(anno):
 
     for element in cursor:
         if (element['_id']['area'] == "Urbano"):
-            listUrbana.append(element)
+            listUrbana.append(element['escolaridadPorInstitucion'])
         else:
-            listRural.append(element)
+            listRural.append(element['escolaridadPorInstitucion'])
     return listUrbana, listRural
 
 def EscolaridadPorRegion(anno):
